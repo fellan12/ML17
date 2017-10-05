@@ -3,23 +3,24 @@ from cvxopt.base import matrix # Converts normal mtx to cvxopt mtx
 
 import numpy, pylab, random, math
 
-tpe = "L"
+tpe = "R"
+c = 1
 
 def gen_data():
 	# Uncomment the line below to generate
 	# the same dataset over and over again.
 	numpy.random.seed(100)
-	classA = [(random.normalvariate(-10.5,1),
+	classA = [(random.normalvariate(-1.0,1),
 		   	random.normalvariate(0.5,1),
 		   	1.0) 
 			for i in range (5)] + \
-			[(random.normalvariate(1.5,1),
+			[(random.normalvariate(1.0,1),
 			random.normalvariate(0.5,1), 
 			1.0)
 			for i in range (5)]
 
-	classB = [(random.normalvariate(0.0,0.5),
-			random.normalvariate(-10.5,0.5),
+	classB = [(random.normalvariate(0.0,1),
+			random.normalvariate(0.5,1),
 			-1.0)
 			for i in range (10)]
 	data = classA + classB
@@ -27,11 +28,13 @@ def gen_data():
 	return data, classA, classB
 
 # Kernel functions
-def kernel(x, y, p=1, sigma=1):
+def kernel(x, y, p=1, sigma=1, k = -10, delta = 0):
 	if tpe == "L" or tpe == "P":
 		return (numpy.dot(numpy.transpose(x),y)+1)**p
 	elif tpe == "R":
-		return e**(((numpy.subtract(x,y))**2)/(2*sigma**2))
+		return math.exp(-(numpy.dot(numpy.subtract(x,y),numpy.subtract(x,y))/(2*sigma**2)))
+	elif tpe == "S":
+		return numpy.tanh(k*numpy.dot(numpy.transpose(x),y)-delta)
 
 # Matrix P
 def create_matrix_P(data):
@@ -45,16 +48,17 @@ def create_matrix_P(data):
 		P.append(row)
 	return P
 
-def alpha_x(data, alpha):
+def alphaX(data, alpha):
 	lst = []
 	epsilon = 10e-05
 	for i in range(len(alpha)):
-		if abs(alpha) > epsilon:
+		if abs(alpha[i]) > epsilon:
 			lst.append((data[i][0], data[i][1], data[i][2], alpha[i]))
+	return lst
 
-def indicator(xs, ys):
+def indicator(xs, ys, alpha_x):
 	res = 0
-	for (x, y, t, alpha) in lst:
+	for (x, y, t, alpha) in alpha_x:
 		res += alpha*t*kernel([xs, ys], [x, y])
 	return res
 
@@ -64,21 +68,44 @@ def main():
 
 	# Vector q, vector h, matrix G
 	q = [(-1.0) for i in range (20)]
+	
+	#h =[0.0 if i < 20 else c for i in range (40)]
 	h =[0.0 for i in range (20)]
-	G = numpy.identity(20)*(-1)
-	P = create_matrix_P(tpe, data)
+
+	G = numpy.identity(20)*(-1.0)
+	
+
+	Gs = []
+	for x in range(40):
+		tmp = []
+		for y in range(20):
+			print("x:", x, "y: ",y)
+			if x == y:
+				tmp.append(-1.0)
+			elif x == y+20:
+				tmp.append(1.0)
+			else:
+				tmp.append(0.0)
+		Gs.append(tmp)
+
+	#G = numpy.array(Gs)
+
+	#print(G1)
+	P = create_matrix_P(data)
 
 	# Calculate alpha
 	r = qp(matrix(P) , matrix(q) , matrix(G) , matrix(h))
 	alpha = list(r['x'])
 
-	alpha_x = alpha_x(data, alpha)
+	alpha_x = alphaX(data, alpha)
 
 	xrange=numpy.arange(-4,4,0.05)
 	yrange=numpy.arange(-4,4,0.05)
-	grid=matrix ([[indicator(x,y)
+	grid=matrix ([[indicator(x,y,alpha_x)
 				for y in yrange ]
 				for x in xrange ])
+
+	print(grid)
 
 	
 	pylab.contour(xrange, yrange, grid,
@@ -93,7 +120,10 @@ def main():
 	pylab.plot([p[0] for p in classB],
 	[p[1] for p in classB],
 	'ro')
+	pylab.hold(False)
 	pylab.show()
+
+main()
 
 
 
