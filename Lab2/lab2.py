@@ -29,7 +29,7 @@ def gen_data():
 	return data, classA, classB
 
 # Kernel functions
-def kernel(x, y, p=1, sigma=1, k = -10, delta = 0):
+def kernel(x, y, p=1, sigma=1):
 	if tpe == "L" or tpe == "P":
 		return (numpy.dot(numpy.transpose(x),y)+1)**p
 	elif tpe == "R":
