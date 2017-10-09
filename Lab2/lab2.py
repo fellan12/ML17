@@ -67,7 +67,7 @@ def main():
 	# Generate data
 	data, classA, classB = gen_data()
 
-	# Vector q, vector h, matrix G
+	# Vector q
 	q = [(-1.0) for i in range (20)]
 
 	# No Slack G and h
