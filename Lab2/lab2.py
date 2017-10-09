@@ -89,7 +89,7 @@ def main():
 				tmp.append(0.0)
 		Gs.append(tmp)
 
-	#G = numpy.array(Gs)
+	Gs = numpy.array(Gs)
 
 	#print(G1)
 	P = create_matrix_P(data)
