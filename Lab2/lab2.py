@@ -64,18 +64,17 @@ def indicator(xs, ys, alpha_x):
 	return res
 
 def main():
+	# Generate data
 	data, classA, classB = gen_data()
-
 
 	# Vector q, vector h, matrix G
 	q = [(-1.0) for i in range (20)]
 
-	#h =[0.0 if i < 20 else c for i in range (40)]
 	h =[0.0 for i in range (20)]
-
 	G = numpy.identity(20)*(-1.0)
 
 
+	hs =[0.0 if i < 20 else c for i in range (40)]
 	Gs = []
 	for x in range(40):
 		tmp = []
@@ -95,7 +94,7 @@ def main():
 	P = create_matrix_P(data)
 
 	# Calculate alpha
-	r = qp(matrix(P) , matrix(q) , matrix(G) , matrix(h))
+	r = qp(matrix(P) , matrix(q) , matrix(Gs) , matrix(hs))
 	alpha = list(r['x'])
 
 	alpha_x = alphaX(data, alpha)
