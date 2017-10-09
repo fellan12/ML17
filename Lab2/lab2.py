@@ -70,10 +70,11 @@ def main():
 	# Vector q, vector h, matrix G
 	q = [(-1.0) for i in range (20)]
 
+	# No Slack G and h
 	h =[0.0 for i in range (20)]
 	G = numpy.identity(20)*(-1.0)
 
-
+	# Slack Gs and hs
 	hs =[0.0 if i < 20 else c for i in range (40)]
 	Gs = []
 	for x in range(40):
