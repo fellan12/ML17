@@ -108,7 +108,6 @@ def main():
 
 	print(grid)
 
-
 	pylab.contour(xrange, yrange, grid,
 					(-1.0, 0.0, 1.0),
 					colors=('red', 'black', 'blue'),
