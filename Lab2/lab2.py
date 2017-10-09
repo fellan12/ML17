@@ -3,8 +3,8 @@ from cvxopt.base import matrix # Converts normal mtx to cvxopt mtx
 
 import numpy, pylab, random, math
 
-tpe = "R"
-c = 1
+tpe = "R"	# Kernel-function
+c = 1		# Slack-variable
 
 # Generate data to be used for computing a hyperplane
 def gen_data():
