@@ -91,7 +91,6 @@ def main():
 
 	Gs = numpy.array(Gs)
 
-	#print(G1)
 	P = create_matrix_P(data)
 
 	# Calculate alpha
@@ -106,13 +105,15 @@ def main():
 				for y in yrange ]
 				for x in xrange ])
 
-	print(grid)
+	#print(grid)
 
+	# Print the hyperplane with margin
 	pylab.contour(xrange, yrange, grid,
 					(-1.0, 0.0, 1.0),
 					colors=('red', 'black', 'blue'),
 					linewidths=(1, 3, 1))
 
+	# Print datapoints
 	pylab.hold(True)
 	pylab.plot([p[0] for p in classA],
 				[p[1] for p in classA],
@@ -121,6 +122,7 @@ def main():
 	[p[1] for p in classB],
 	'ro')
 	pylab.hold(False)
+
 	pylab.show()
 
 main()
