@@ -6,16 +6,17 @@ import numpy, pylab, random, math
 tpe = "R"
 c = 1
 
+# Generate data to be used for computing a hyperplane
 def gen_data():
 	# Uncomment the line below to generate
 	# the same dataset over and over again.
 	numpy.random.seed(100)
 	classA = [(random.normalvariate(-1.0,1),
 		   	random.normalvariate(0.5,1),
-		   	1.0) 
+		   	1.0)
 			for i in range (5)] + \
 			[(random.normalvariate(1.0,1),
-			random.normalvariate(0.5,1), 
+			random.normalvariate(0.5,1),
 			1.0)
 			for i in range (5)]
 
@@ -48,6 +49,7 @@ def create_matrix_P(data):
 		P.append(row)
 	return P
 
+# Extract all alpha's that are larger than 0
 def alphaX(data, alpha):
 	lst = []
 	epsilon = 10e-05
@@ -56,6 +58,7 @@ def alphaX(data, alpha):
 			lst.append((data[i][0], data[i][1], data[i][2], alpha[i]))
 	return lst
 
+# Classifies a datapoint
 def indicator(xs, ys, alpha_x):
 	res = 0
 	for (x, y, t, alpha) in alpha_x:
@@ -64,16 +67,16 @@ def indicator(xs, ys, alpha_x):
 
 def main():
 	data, classA, classB = gen_data()
-	
+
 
 	# Vector q, vector h, matrix G
 	q = [(-1.0) for i in range (20)]
-	
+
 	#h =[0.0 if i < 20 else c for i in range (40)]
 	h =[0.0 for i in range (20)]
 
 	G = numpy.identity(20)*(-1.0)
-	
+
 
 	Gs = []
 	for x in range(40):
@@ -107,7 +110,7 @@ def main():
 
 	print(grid)
 
-	
+
 	pylab.contour(xrange, yrange, grid,
 					(-1.0, 0.0, 1.0),
 					colors=('red', 'black', 'blue'),
@@ -124,17 +127,3 @@ def main():
 	pylab.show()
 
 main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
