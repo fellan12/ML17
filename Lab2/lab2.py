@@ -34,8 +34,6 @@ def kernel(x, y, p=1, sigma=1, k = -10, delta = 0):
 		return (numpy.dot(numpy.transpose(x),y)+1)**p
 	elif tpe == "R":
 		return math.exp(-(numpy.dot(numpy.subtract(x,y),numpy.subtract(x,y))/(2*sigma**2)))
-	elif tpe == "S":
-		return numpy.tanh(k*numpy.dot(numpy.transpose(x),y)-delta)
 
 # Matrix P
 def create_matrix_P(data):
